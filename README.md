@@ -10,7 +10,6 @@ gold_price_pipeline/
 │── src/                       # Source code directory
 │   ├── main.py                # Main ETL script
 │   ├── crawler.py             # Web scraping logic
-│   ├── bigquery_utils.py      # Functions to interact with BigQuery
 │── requirements.txt           # Dependencies
 │── Dockerfile                 # Docker configuration
 │── README.md                  # Project documentation
@@ -92,7 +91,6 @@ gcloud run jobs execute gold-price-pipeline-job --region=us-central1
 ### 📊 Data Schema
 | Column   | Type   | Description |
 |----------|--------|-------------|
-| `id` | `INT64` | Auto-increment ID (not natively supported by BigQuery) |
 | `type` | `STRING` | Gold type |
 | `buy` | `INT64` | Buying price |
 | `sell` | `INT64` | Selling price |

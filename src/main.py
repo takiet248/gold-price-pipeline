@@ -4,13 +4,13 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 from crawler import extract_from_doji, transform_data_doji
 
-# Config BigQuery
+# Config BigQuery variable
 PROJECT_ID = "gold-price-crawler"
 DATASET_ID = "gold_store"
 TABLE_ID = "gold_price"
 SERVICE_ACCOUNT_FILE = "service-account-key.json"
 
-# Khởi tạo BigQuery client
+# Initialize BigQuery client
 creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
 client = bigquery.Client(credentials=creds, project=PROJECT_ID)
 
@@ -22,7 +22,7 @@ def get_latest_date_from_bigquery():
     query_job = client.query(query)
     results = query_job.result()
     for row in results:
-        return row.latest_date  # Trả về dạng YYYY-MM-DD
+        return row.latest_date  #return format YYYY-MM-DD
     return None
 
 

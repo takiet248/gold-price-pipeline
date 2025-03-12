@@ -19,6 +19,16 @@ gold_price_pipeline/
 
 ---
 
+## Tech Stack
+- **Python**: Core programming language for data processing.
+- **Web Scraping**: Used to extract gold price data from web sources.
+- **Google BigQuery**: Serverless data warehouse for storing extracted data.
+- **Looker Studio**: Data visualization tool for creating dashboards and reports.
+- **Docker**: Containerization platform for ensuring consistency across environments.
+- **Google Cloud Run Jobs**: Serverless execution of containerized ETL tasks.
+
+---
+
 ## 🚀 Running the Pipeline
 
 ### 1️⃣ Run Locally
@@ -131,3 +141,4 @@ Since Docker containers are stateless, you must **pass the key as a secret**:
 ---
 
 📩 **Questions or issues? Feel free to reach out!** 🚀
+

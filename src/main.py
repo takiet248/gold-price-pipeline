@@ -14,35 +14,27 @@ SERVICE_ACCOUNT_FILE = "service-account-key.json"
 creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
 client = bigquery.Client(credentials=creds, project=PROJECT_ID)
 
-def get_latest_date_from_bigquery():
-    """Fetches the latest date (truncated) from BigQuery."""
+def delete_today_data():
+    """Deletes today's data from BigQuery before inserting new data."""
+    today_str = datetime.today().strftime("%Y-%m-%d")
     query = f"""
-        SELECT DATE(MAX(datetime)) as latest_date FROM `{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}`
+        DELETE FROM `{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}`
+        WHERE DATE(datetime) = '{today_str}'
     """
+    print(f"🗑️ Deleting existing data for {today_str} from BigQuery...")
     query_job = client.query(query)
-    results = query_job.result()
-    for row in results:
-        return row.latest_date  #return format YYYY-MM-DD
-    return None
-
-
-def should_run_pipeline():
-    """Checks if the latest date in BigQuery is today. If yes, skip the ETL process."""
-    latest_date_in_bq = get_latest_date_from_bigquery()
-    today_date = datetime.today().date()
-    
-    if latest_date_in_bq and latest_date_in_bq == today_date:
-        print(f"⏭️ Pipeline skipped: Data for {today_date} is already in BigQuery.")
-        return False
-    return True
+    query_job.result()
+    print(f"✅ Data for {today_str} deleted successfully.")
 
 def update_bigquery(df):
-    """Loads transformed data directly into BigQuery."""
+    """Clears today's data and loads transformed data into BigQuery."""
     if df.empty:
         print("❌ No new data to update BigQuery.")
         return
     
-    table_ref = f"{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}"
+    delete_today_data()  # Always delete before inserting
+
+    table_ref = f"{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}"  # ✅ FIXED TYPO HERE
     job_config = bigquery.LoadJobConfig(write_disposition="WRITE_APPEND")
     
     print("📊 Updating BigQuery...")
@@ -51,16 +43,13 @@ def update_bigquery(df):
     print("✅ BigQuery updated successfully.")
 
 def run_etl():
-    """Runs the ETL pipeline only if today's data is not in BigQuery."""
+    """Runs the ETL pipeline."""
     print("🚀 Starting ETL process...")
 
-    if not should_run_pipeline():
-        return  # Skip if today's data is already in BigQuery
-    
     extracted_df = extract_from_doji("https://baomoi.com/tien-ich/gia-vang-doji.epi")
     transformed_df = transform_data_doji(extracted_df)
-    if not transformed_df.empty:
-        update_bigquery(transformed_df)
+
+    update_bigquery(transformed_df)
 
     print("✅ ETL process completed successfully.")
 

@@ -131,7 +131,7 @@ Since Docker containers are stateless, you must **pass the key as a secret**:
 ---
 
 ## 📌 Notes
-- The pipeline **automatically checks** if today's data is already in **BigQuery** before inserting new records.
+- The pipeline **automatically removes**  today's data already in **BigQuery** before inserting new records.
 - If you get a **pyarrow** error, ensure it’s included in `requirements.txt`:
   ```
   pyarrow==15.0.0

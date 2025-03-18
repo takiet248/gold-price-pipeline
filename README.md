@@ -2,6 +2,8 @@
 
 🚀 **Gold Price Pipeline** is an automated ETL pipeline that scrapes gold price data from the web, stores it in **BigQuery**, and visualizes it in **Looker Studio**.
 
+![image](https://github.com/user-attachments/assets/df886d33-433e-409d-96df-6baee6ce5fd8)
+
 ---
 
 ## 📂 Project Structure
